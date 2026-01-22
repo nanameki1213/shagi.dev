@@ -1,57 +1,73 @@
+'use client'
+
 import { Heading, Flex, Text } from '@radix-ui/themes'
-import Post from '@/app/types/posts'
+import { usePost } from '@/app/hooks/usePosts'
 import ReactMarkdown from 'react-markdown'
-import Head from 'next/head'
+import { useParams } from 'next/navigation'
+import styles from './page.module.css'
 
-const TOKEN = process.env.TOKEN
-const URL = process.env.API_URL
-
-async function getPost(slug: string) {
-  try {
-    const res = await fetch(URL + `/api/posts?filters[Slug][$eq]=${slug}&populate=*`, {
-      headers: {
-        Authorization: 'Bearer ' + TOKEN,
-      },
-    })
-    const data = await res.json()
-    if (data.data == null) {
-      console.error('APIのエラーが発生しました：', data.error.detail)
-    } else {
-      const post: Post = data.data[0]
-      return post
-    }
-  } catch (err) {
-    console.error('エラーが発生しました：', err)
-  }
+function PostDetailSkeleton() {
+  return (
+    <div className={styles.container}>
+      <div className={styles.titleSkeleton} />
+      <Flex gap="2" className={styles.metaSkeleton}>
+        <div className={styles.dateSkeleton} />
+        <div className={styles.categorySkeleton} />
+      </Flex>
+      <div className={styles.contentSkeleton}>
+        <div className={styles.lineSkeleton} />
+        <div className={styles.lineSkeleton} />
+        <div className={styles.lineSkeleton} style={{ width: '80%' }} />
+        <div className={styles.lineSkeleton} />
+        <div className={styles.lineSkeleton} style={{ width: '60%' }} />
+      </div>
+    </div>
+  )
 }
 
-export default async function postPage({ params }: { params: { slug: string } }) {
-  const pars = await params
-  const post = await getPost(pars.slug)
-  if (post == undefined) {
-    console.error('記事一覧の取得に失敗しました。')
+export default function PostPage() {
+  const params = useParams()
+  const slug = params.slug as string
+  const { data: post, isLoading, isError, error } = usePost(slug)
+
+  if (isLoading) {
+    return <PostDetailSkeleton />
+  }
+
+  if (isError) {
     return (
-      <Flex direction="column" gap="4">
-        <Heading size="6">記事一覧</Heading>
-        <Text color="red">記事の取得に失敗しました。</Text>
+      <Flex direction="column" gap="4" p="4">
+        <Heading size="6">エラー</Heading>
+        <Text color="red">記事の取得に失敗しました: {error?.message || 'Unknown error'}</Text>
       </Flex>
     )
   }
-  return (
-    <div>
-      <Head>
-        <title>{post.Title}</title>
-      </Head>
-      <h1>{post.Title}</h1>
-      <Flex gap="2">
-        <Text as="p" size="2" weight="light">
-          {post.Published_Date}
-        </Text>
-        <Text as="p" size="2">
-          カテゴリ：{post.category.Name}
-        </Text>
+
+  if (!post) {
+    return (
+      <Flex direction="column" gap="4" p="4">
+        <Heading size="6">記事が見つかりません</Heading>
+        <Text color="gray">指定された記事は存在しないか、削除された可能性があります。</Text>
       </Flex>
-      <ReactMarkdown>{post.Content}</ReactMarkdown>
+    )
+  }
+
+  return (
+    <div className={styles.container}>
+      <h1 className={styles.title}>{post.Title}</h1>
+      <Flex gap="2" className={styles.meta}>
+        <Text as="p" size="2" color="gray">
+          {post.Published_Date && new Date(post.Published_Date).toLocaleDateString('ja-JP')}
+        </Text>
+        {post.category && (
+          <Text as="p" size="2" color="violet">
+            カテゴリ：{post.category.Name}
+          </Text>
+        )}
+      </Flex>
+      <div className={styles.content}>
+        <ReactMarkdown>{post.Content}</ReactMarkdown>
+      </div>
     </div>
   )
 }
