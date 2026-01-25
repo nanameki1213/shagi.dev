@@ -7,7 +7,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL
  * 記事一覧を取得する
  */
 export async function fetchPosts(): Promise<Post[]> {
-    const res = await fetch(`${API_URL}/api/posts?populate=*&sort=Published_Date:desc`, {
+    const res = await fetch(`${API_URL}/api/posts?populate=*`, {
         headers: {
             Authorization: `Bearer ${TOKEN}`,
         },
