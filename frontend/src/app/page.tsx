@@ -1,59 +1,29 @@
-import Link from 'next/link'
-import Post from '@/app/types/posts'
-import { Heading, Flex, Card, Text, Separator } from '@radix-ui/themes'
+// src/app/posts/page.tsx
+import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query'
+import { getPostGetPostsQueryKey, postGetPosts } from '@/gen/post/post' // パスは適宜調整
+import PostListClient from '@/app/components/PostListClient'
 
-// Read-Onlyのtoken
-const TOKEN = process.env.TOKEN
-const URL = process.env.API_URL
+export default async function PostsPage() {
+  const queryClient = new QueryClient()
 
-async function getPosts() {
-  try {
-    const res = await fetch(URL + '/api/posts?populate=*', {
-      cache: 'no-store',
-      headers: {
-        Authorization: 'Bearer ' + TOKEN,
-      },
-    })
-    const data = await res.json()
-    if (data.data == null) {
-      console.error('APIのエラーが発生しました：', data.error.message)
-    } else {
-      const posts: Post[] = data.data
-      return posts
-    }
-  } catch (err) {
-    console.error('エラーが発生しました：', err)
-  }
-}
+  // 1. サーバーサイドでAPIを叩く
+  // queryKeyを共通化するためにOrvalの生成関数を使うのがコツです
+  await queryClient.prefetchQuery({
+    queryKey: getPostGetPostsQueryKey(),
+    queryFn: () => postGetPosts().then((res) => {
+      console.log("res:", res);
+      res.data
+    }),
+  })
 
-export default async function Home() {
-  const posts = await getPosts()
-  if (posts == undefined) {
-    console.error('記事一覧の取得に失敗しました。')
-    return (
-      <Flex direction="column" gap="4">
-        <Heading size="6">記事一覧</Heading>
-        <Text color="red">記事の取得に失敗しました。</Text>
-      </Flex>
-    )
-  }
   return (
-    <Flex direction="column" gap="4" p="4">
-      <Heading size="6">最新の記事</Heading>
-      <Separator size="4" />
-      <Flex direction="column" gap="3">
-        {posts.map((post: Post) => (
-          <Link href={`/posts/${post.Slug}`} passHref key={post.id}>
-            <Card asChild>
-              <Flex direction="column" gap="2">
-                <Text as="p" size="5" weight="bold">
-                  {post.Title}
-                </Text>
-              </Flex>
-            </Card>
-          </Link>
-        ))}
-      </Flex>
-    </Flex>
+    <main className="container mx-auto p-4">
+      <h1 className="text-2xl font-bold mb-6">記事一覧</h1>
+
+      {/* 2. データをシリアライズしてクライアントへ渡す */}
+      <HydrationBoundary state={dehydrate(queryClient)}>
+        <PostListClient />
+      </HydrationBoundary>
+    </main>
   )
 }
