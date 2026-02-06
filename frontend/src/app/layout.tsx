@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Theme, Container } from '@radix-ui/themes'
 import Providers from './providers'
+import SiteHeader from './components/SiteHeader'
+import SiteFooter from './components/SiteFooter'
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -29,7 +31,15 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Providers>
           <Theme appearance="light" accentColor="violet" grayColor="slate" panelBackground="solid" radius="large">
-            <Container size="2">{children}</Container>
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+              <SiteHeader />
+              <main style={{ flex: 1 }}>
+                <Container size="4" p="4">
+                  {children}
+                </Container>
+              </main>
+              <SiteFooter />
+            </div>
           </Theme>
         </Providers>
       </body>

@@ -1,4 +1,4 @@
-FROM node:22-bullseye-slim AS builder
+FROM node:22-bullseye AS builder
 
 ENV NODE_ENV=production
 ENV NODE_OPTIONS="--max-old-space-size=4096"
@@ -19,6 +19,8 @@ COPY --from=builder /opt/node_modules ./node_modules
 WORKDIR /opt/app
 COPY --from=builder /opt/app ./
 ENV PATH=/opt/node_modules/.bin:$PATH
+
+RUN chown -R node:node /opt/app /opt/node_modules
 
 USER node
 COPY --chown=node:node . .
