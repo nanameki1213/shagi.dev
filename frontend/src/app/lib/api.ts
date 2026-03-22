@@ -1,5 +1,5 @@
 import Post, { PostsResponse } from '@/app/types/posts'
-import NikkiEntry, { NikkiResponse } from '@/app/types/nikki'
+import BookEntry, { BooksResponse } from '@/app/types/books'
 
 const API_KEY = process.env.MICROCMS_API_KEY
 const SERVICE_DOMAIN = process.env.MICROCMS_SERVICE_DOMAIN
@@ -25,17 +25,32 @@ export async function fetchPosts(): Promise<Post[]> {
 }
 
 /**
- * 日記一覧を取得する
+ * 読書メモ一覧を取得する
  */
-export async function fetchNikkiEntries(): Promise<NikkiEntry[]> {
-    const res = await fetch(`${BASE_URL}/nikki`, { headers })
+export async function fetchBooks(): Promise<BookEntry[]> {
+    const res = await fetch(`${BASE_URL}/books`, { headers })
 
     if (!res.ok) {
-        throw new Error(`Failed to fetch nikki: ${res.status}`)
+        throw new Error(`Failed to fetch books: ${res.status}`)
     }
 
-    const data: NikkiResponse = await res.json()
+    const data: BooksResponse = await res.json()
     return data.contents
+}
+
+/**
+ * 読書メモをIDで取得する
+ */
+export async function fetchBookById(id: string): Promise<BookEntry | null> {
+    const res = await fetch(`${BASE_URL}/books/${encodeURIComponent(id)}`, { headers })
+
+    if (res.status === 404) return null
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch book: ${res.status}`)
+    }
+
+    return res.json()
 }
 
 /**

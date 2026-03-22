@@ -23,8 +23,8 @@ export default function SiteHeader() {
                         <NextLink href="/" style={{ textDecoration: 'none', color: 'var(--gray-11)' }}>
                             <Text size="2" weight="medium" style={{ transition: 'color 0.2s' }}>Home</Text>
                         </NextLink>
-                        <NextLink href="/nikki" style={{ textDecoration: 'none', color: 'var(--gray-11)' }}>
-                            <Text size="2" weight="medium" style={{ transition: 'color 0.2s' }}>日記</Text>
+                        <NextLink href="/books" style={{ textDecoration: 'none', color: 'var(--gray-11)' }}>
+                            <Text size="2" weight="medium" style={{ transition: 'color 0.2s' }}>読書メモ</Text>
                         </NextLink>
 
                         <Flex gap="3" ml="2">
