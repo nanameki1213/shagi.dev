@@ -9,17 +9,17 @@ interface PostCardProps {
 }
 
 export default function PostCard({ post }: PostCardProps) {
-    const imageUrl = post.Featured_Image?.url
+    const imageUrl = post.eyecatch?.url
 
     return (
-        <Link href={`/posts/${post.Slug}`} className={styles.link}>
+        <Link href={`/posts/${post.id}`} className={styles.link}>
             <Card className={styles.card}>
                 <Flex direction="column" gap="3">
                     {imageUrl && (
                         <div className={styles.imageWrapper}>
                             <Image
                                 src={imageUrl}
-                                alt={post.Featured_Image?.alternativeText || post.Title}
+                                alt={post.eyecatch?.alternativeText || post.title}
                                 fill
                                 className={styles.image}
                                 sizes="(max-width: 768px) 100vw, 600px"
@@ -28,17 +28,17 @@ export default function PostCard({ post }: PostCardProps) {
                     )}
                     <Flex direction="column" gap="2" p="2">
                         <Text as="p" size="5" weight="bold" className={styles.title}>
-                            {post.Title}
+                            {post.title}
                         </Text>
                         <Flex gap="2" align="center" wrap="wrap">
-                            {post.Published_Date && (
+                            {post.publishedAt && (
                                 <Text as="span" size="2" color="gray">
-                                    {new Date(post.Published_Date).toLocaleDateString('ja-JP')}
+                                    {new Date(post.publishedAt).toLocaleDateString('ja-JP')}
                                 </Text>
                             )}
                             {post.category && (
                                 <Badge color="violet" variant="soft">
-                                    {post.category.Name}
+                                    {post.category.name}
                                 </Badge>
                             )}
                         </Flex>

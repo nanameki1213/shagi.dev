@@ -3,12 +3,10 @@ import MicroCMSImage from './media'
 
 export default interface Post {
     id: string
-    Title: string
-    Published_Date: string
-    Slug: string
-    Content: string
+    title: string
+    content: string
+    eyecatch?: MicroCMSImage
     category?: Category
-    Featured_Image?: MicroCMSImage
     createdAt?: string
     updatedAt?: string
     publishedAt?: string

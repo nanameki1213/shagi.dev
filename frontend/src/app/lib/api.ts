@@ -13,7 +13,7 @@ const headers = {
  * 記事一覧を取得する
  */
 export async function fetchPosts(): Promise<Post[]> {
-    const res = await fetch(`${BASE_URL}/posts`, { headers })
+    const res = await fetch(`${BASE_URL}/blogs`, { headers })
 
     if (!res.ok) {
         throw new Error(`Failed to fetch posts: ${res.status}`)
@@ -24,18 +24,16 @@ export async function fetchPosts(): Promise<Post[]> {
 }
 
 /**
- * 個別記事をSlugで取得する
+ * 個別記事をIDで取得する
  */
-export async function fetchPostBySlug(slug: string): Promise<Post | null> {
-    const res = await fetch(
-        `${BASE_URL}/posts?filters=Slug[equals]${encodeURIComponent(slug)}`,
-        { headers }
-    )
+export async function fetchPostById(id: string): Promise<Post | null> {
+    const res = await fetch(`${BASE_URL}/blogs/${encodeURIComponent(id)}`, { headers })
+
+    if (res.status === 404) return null
 
     if (!res.ok) {
         throw new Error(`Failed to fetch post: ${res.status}`)
     }
 
-    const data: PostsResponse = await res.json()
-    return data.contents[0] ?? null
+    return res.json()
 }
