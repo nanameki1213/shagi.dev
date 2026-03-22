@@ -1,5 +1,3 @@
-'use client'
-
 import { Flex, Text, Container, Box } from '@radix-ui/themes'
 
 export default function SiteFooter() {

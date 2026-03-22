@@ -1,5 +1,5 @@
 export default interface Category {
-  id: number
-  Name: string
-  Slug: string
+    id: string
+    Name: string
+    Slug: string
 }

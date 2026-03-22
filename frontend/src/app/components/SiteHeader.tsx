@@ -1,7 +1,5 @@
-'use client'
-
 import NextLink from 'next/link'
-import { Flex, Text, Button, Container, Box } from '@radix-ui/themes'
+import { Flex, Text, Container, Box } from '@radix-ui/themes'
 import { GitHubLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons'
 
 export default function SiteHeader() {
@@ -27,12 +25,12 @@ export default function SiteHeader() {
                         </NextLink>
 
                         <Flex gap="3" ml="2">
-                            <Button variant="ghost" color="gray" onClick={() => window.open('https://github.com/nanameki1213', '_blank')}>
+                            <a href="https://github.com/nanameki1213" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', color: 'var(--gray-11)' }}>
                                 <GitHubLogoIcon width="18" height="18" />
-                            </Button>
-                            <Button variant="ghost" color="gray" onClick={() => window.open('https://x.com/shinysheep0158', '_blank')}>
+                            </a>
+                            <a href="https://x.com/shinysheep0158" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', color: 'var(--gray-11)' }}>
                                 <TwitterLogoIcon width="18" height="18" />
-                            </Button>
+                            </a>
                         </Flex>
                     </Flex>
                 </Flex>

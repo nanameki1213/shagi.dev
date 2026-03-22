@@ -1,17 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  output: 'standalone',
+  output: 'export',
   images: {
-    unoptimized: process.env.NODE_ENV === 'development',
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost',
-        port: '1337',
-      },
-    ],
+    unoptimized: true,
   },
 };
 

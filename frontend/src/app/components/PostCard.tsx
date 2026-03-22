@@ -1,5 +1,3 @@
-'use client'
-
 import Link from 'next/link'
 import Image from 'next/image'
 import { Card, Flex, Text, Badge } from '@radix-ui/themes'
@@ -12,7 +10,6 @@ interface PostCardProps {
 
 export default function PostCard({ post }: PostCardProps) {
     const imageUrl = post.Featured_Image?.url
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || ''
 
     return (
         <Link href={`/posts/${post.Slug}`} className={styles.link}>
@@ -21,7 +18,7 @@ export default function PostCard({ post }: PostCardProps) {
                     {imageUrl && (
                         <div className={styles.imageWrapper}>
                             <Image
-                                src={imageUrl.startsWith('http') ? imageUrl : `${apiUrl}${imageUrl}`}
+                                src={imageUrl}
                                 alt={post.Featured_Image?.alternativeText || post.Title}
                                 fill
                                 className={styles.image}

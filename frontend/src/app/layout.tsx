@@ -2,7 +2,6 @@ import type { Metadata } from 'next'
 import { Geist, Geist_Mono } from 'next/font/google'
 import './globals.css'
 import { Theme, Container } from '@radix-ui/themes'
-import Providers from './providers'
 import SiteHeader from './components/SiteHeader'
 import SiteFooter from './components/SiteFooter'
 
@@ -29,19 +28,17 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Providers>
-          <Theme appearance="light" accentColor="violet" grayColor="slate" panelBackground="solid" radius="large">
-            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-              <SiteHeader />
-              <main style={{ flex: 1 }}>
-                <Container size="4" p="4">
-                  {children}
-                </Container>
-              </main>
-              <SiteFooter />
-            </div>
-          </Theme>
-        </Providers>
+        <Theme appearance="light" accentColor="violet" grayColor="slate" panelBackground="solid" radius="large">
+          <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+            <SiteHeader />
+            <main style={{ flex: 1 }}>
+              <Container size="4" p="4">
+                {children}
+              </Container>
+            </main>
+            <SiteFooter />
+          </div>
+        </Theme>
       </body>
     </html>
   )
