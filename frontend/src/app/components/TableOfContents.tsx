@@ -21,14 +21,14 @@ function generateId(text: string): string {
         .trim()
 }
 
-export function extractHeadings(markdown: string): TocItem[] {
-    const headingRegex = /^(#{2,3})\s+(.+)$/gm
+export function extractHeadings(html: string): TocItem[] {
+    const headingRegex = /<(h[23])[^>]*>(.*?)<\/h[23]>/gi
     const headings: TocItem[] = []
     let match
 
-    while ((match = headingRegex.exec(markdown)) !== null) {
-        const level = match[1].length
-        const text = match[2].trim()
+    while ((match = headingRegex.exec(html)) !== null) {
+        const level = parseInt(match[1][1])
+        const text = match[2].replace(/<[^>]+>/g, '').trim()
         headings.push({
             id: generateId(text),
             text,
@@ -37,6 +37,14 @@ export function extractHeadings(markdown: string): TocItem[] {
     }
 
     return headings
+}
+
+export function addHeadingIds(html: string): string {
+    return html.replace(/<(h[23])([^>]*)>(.*?)<\/h[23]>/gi, (_, tag, attrs, inner) => {
+        const text = inner.replace(/<[^>]+>/g, '').trim()
+        const id = generateId(text)
+        return `<${tag}${attrs} id="${id}">${inner}</${tag}>`
+    })
 }
 
 export default function TableOfContents({ content }: TableOfContentsProps) {

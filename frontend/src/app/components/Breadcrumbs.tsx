@@ -1,5 +1,3 @@
-'use client'
-
 import NextLink from 'next/link'
 import { Flex, Text } from '@radix-ui/themes'
 import { ChevronRightIcon } from '@radix-ui/react-icons'
