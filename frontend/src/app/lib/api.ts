@@ -1,4 +1,5 @@
 import Post, { PostsResponse } from '@/app/types/posts'
+import NikkiEntry, { NikkiResponse } from '@/app/types/nikki'
 
 const API_KEY = process.env.MICROCMS_API_KEY
 const SERVICE_DOMAIN = process.env.MICROCMS_SERVICE_DOMAIN
@@ -20,6 +21,20 @@ export async function fetchPosts(): Promise<Post[]> {
     }
 
     const data: PostsResponse = await res.json()
+    return data.contents
+}
+
+/**
+ * 日記一覧を取得する
+ */
+export async function fetchNikkiEntries(): Promise<NikkiEntry[]> {
+    const res = await fetch(`${BASE_URL}/nikki`, { headers })
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch nikki: ${res.status}`)
+    }
+
+    const data: NikkiResponse = await res.json()
     return data.contents
 }
 

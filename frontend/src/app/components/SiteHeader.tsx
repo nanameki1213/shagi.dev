@@ -23,6 +23,9 @@ export default function SiteHeader() {
                         <NextLink href="/" style={{ textDecoration: 'none', color: 'var(--gray-11)' }}>
                             <Text size="2" weight="medium" style={{ transition: 'color 0.2s' }}>Home</Text>
                         </NextLink>
+                        <NextLink href="/nikki" style={{ textDecoration: 'none', color: 'var(--gray-11)' }}>
+                            <Text size="2" weight="medium" style={{ transition: 'color 0.2s' }}>日記</Text>
+                        </NextLink>
 
                         <Flex gap="3" ml="2">
                             <a href="https://github.com/nanameki1213" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', color: 'var(--gray-11)' }}>
